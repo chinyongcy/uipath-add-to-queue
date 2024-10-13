@@ -1,0 +1,40 @@
+{% extends '_base.html' %}
+<!-- Title -->
+{% set title = page_title %}
+<!-- Content -->
+{% block content %}
+<div>
+  <form id="queueForm" onsubmit="return updateConfig(event)">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="dropdown">
+      Select Request Type
+    </label>
+    <select
+      id="formType"
+      name="queueType"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-400 mb-4"
+      onchange="populateForm()"
+      required
+    >
+      <option value="" disabled selected>Select Request Type</option>
+      {% for form_name, details in forms.items() %}
+      <option value="{{ form_name }}">{{ form_name }}</option>
+      {% endfor %}
+    </select>
+    <div id="dynamicForm" class="mb-4"></div>
+
+    <div class="flex items-center justify-between">
+      <div id="queueSubmitMsg" class="text-red-500"></div>
+      <div class="ml-auto">
+        <!-- Add a wrapper div for the button -->
+        <button
+          id="queueSubmit"
+          class="text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

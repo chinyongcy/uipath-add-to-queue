@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="{{url_for('static',filename='css/output-style.css')}}"
+      rel="stylesheet"
+    />
+    <title>{{ title }}</title>
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/history.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/historyDetails.js') }}"></script>
+    <script>
+      const formsData = {{ forms|tojson }};
+      const uipathConfig = sortFields({{ uipath_configs|tojson }});
+      // Init History
+      let history = JSON.parse(localStorage.getItem("history")) || [];
+      loadConfig(uipathConfig);
+      document.addEventListener("DOMContentLoaded", function () {
+        loadConfigDiv(uipathConfig);
+        updateSubmitButton(uipathConfig);
+        document.getElementById('queueForm').addEventListener('submit', submitQueueForm);
+        // Add the event listener for form submission
+      });
+      const historyPageSize = 5;
+      let historyCurPage = 1;
+    </script>
+    <style>
+      /* tr:hover {
+        background-color: coral;
+      } */
+    </style>
+  </head>
+  {% block script %}{% endblock %}
+  <body class="bg-gray-100 flex items-center justify-center h-screen p-4">
+    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-3xl">
+      <div class="flex justify-between items-center pb-4">
+        <!-- Title on the left -->
+        <h2 class="text-2xl font-bold">{{ title }}</h2>
+        <!-- Icons on the right -->
+        <div class="flex space-x-3">
+          <!-- History Icon -->
+          <svg
+            class="text-gray-500 hover:text-gray-400 fill-current"
+            viewBox="-2 0 24 24"
+            height="32px"
+            width="32px"
+            onclick="toggleModalHistory(true, history)"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M5.62132 7L7.06066 8.43934C7.64645 9.02513 7.64645 9.97487 7.06066 10.5607C6.47487 11.1464 5.52513 11.1464 4.93934 10.5607L0.93934 6.56066C0.35355 5.97487 0.35355 5.02513 0.93934 4.43934L4.93934 0.43934C5.52513 -0.146447 6.47487 -0.146447 7.06066 0.43934C7.64645 1.02513 7.64645 1.97487 7.06066 2.56066L5.62132 4H10C15.5228 4 20 8.47715 20 14C20 19.5228 15.5228 24 10 24C4.47715 24 0 19.5228 0 14C0 13.1716 0.67157 12.5 1.5 12.5C2.32843 12.5 3 13.1716 3 14C3 17.866 6.13401 21 10 21C13.866 21 17 17.866 17 14C17 10.134 13.866 7 10 7H5.62132zM11 10V14H13C13.5523 14 14 14.4477 14 15C14 15.5523 13.5523 16 13 16H10C9.4477 16 9 15.5523 9 15V10C9 9.44771 9.4477 9 10 9C10.5523 9 11 9.44771 11 10z"
+            />
+          </svg>
+          <!-- Config Icon -->
+          <svg
+            class="text-gray-500 hover:text-gray-400 fill-current cursor-pointer"
+            viewBox="0 0 512 512"
+            height="32px"
+            width="32px"
+            onclick="toggleModalConfig(true, uipathConfig)"
+          >
+            <path
+              d="M497.569,215.166l-55.345-13.064c-4.032-13.946-9.495-27.27-16.376-39.732l29.85-48.303
+                c4.57-7.397,3.452-16.946-2.688-23.086l-31.99-31.99c-6.129-6.129-15.678-7.248-23.076-2.678l-48.292,29.851
+                c-12.462-6.882-25.785-12.344-39.732-16.377l-13.064-55.368C294.856,5.978,287.306,0,278.63,0h-45.237
+                c-8.678,0-16.227,5.978-18.227,14.419l-13.064,55.368c-13.946,4.032-27.27,9.484-39.732,16.377l-48.303-29.872
+                c-7.387-4.549-16.946-3.441-23.086,2.699L58.99,90.97c-6.13,6.14-7.248,15.709-2.689,23.087l29.862,48.313
+                c-6.882,12.462-12.344,25.786-16.367,39.721l-55.378,13.065C5.978,217.165,0,224.704,0,233.392v45.226
+                c0,8.678,5.978,16.237,14.419,18.226l55.378,13.065c4.032,13.946,9.485,27.259,16.367,39.71l-29.872,48.324
+                c-4.549,7.398-3.441,16.957,2.699,23.098l31.979,31.979c6.14,6.14,15.709,7.257,23.087,2.688l48.323-29.872
+                c12.463,6.882,25.786,12.344,39.722,16.366l13.064,55.366c2,8.463,9.549,14.431,18.227,14.431h45.237
+                c8.677,0,16.226-5.968,18.226-14.431l13.064-55.366c13.937-4.021,27.259-9.484,39.712-16.366l48.312,29.861
+                c7.398,4.57,16.947,3.452,23.087-2.688l31.989-31.99c6.13-6.129,7.248-15.688,2.678-23.087l-29.861-48.302
+                c6.893-12.452,12.345-25.774,16.377-39.721l55.366-13.065c8.463-2.001,14.42-9.539,14.42-18.226v-45.238
+                C512,224.714,506.032,217.165,497.569,215.166z M256.006,303.103c-26.002,0-47.098-21.097-47.098-47.108
+                s21.097-47.108,47.098-47.108c26.011,0,47.108,21.097,47.108,47.108S282.017,303.103,256.006,303.103z"
+            />
+          </svg>
+        </div>
+      </div>
+      <!-- Content -->
+      {% block content %} {% endblock %}
+      <!-- Config  -->
+      {% include 'config.html' %}
+      <!-- History  -->
+      {% include 'history.html' %}
+      <!-- History Details -->
+      {% include 'historyDetails.html' %}
+    </div>
+  </body>
+</html>

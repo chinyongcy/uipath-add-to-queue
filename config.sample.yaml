@@ -1,0 +1,67 @@
+# Rename this file to config.yaml
+UiPath:
+  API_ENDPOINT:
+    Value: https://cloud.uipath.com/
+    Regex: https?:\/\/(www\.)?[a-zA-Z0-9\-_]+(\.[a-zA-Z]{2,})+(:\d+)?(\/[^\s]*)?
+    RegexMsg: Please enter valid url has to start with https:// or http://
+    Placeholder: UiPath API Endpoint
+  ORGANISATION:
+    Value: UiPathOrg
+    Placeholder: Uipath Org
+  TENANT_NAME:
+    Value: DefaultTenant
+    Placeholder: UiPath Tenant Name
+  FOLDER_ID:
+    Value: 123456
+    Regex: ^\d+$
+    RegexMsg: Please enter only numeric number
+    Placeholder: UiPath Folder
+    Optional: false
+  TOKEN:
+    Value: Enter Your Token Value Here
+    Placeholder: Only edit this if you need to use another token. Else leave this as blank to use default
+    Optional: true
+  EMAIL:
+    # Regex with '-' need to be escaped
+    Regex: ^[a-zA-Z0-9._%+\-]+@gmail\.com$
+    RegexMsg: Please enter a valid email that ends with @gmail.com
+    Placeholder: E.g. bob@gmail.com
+
+# Take note your key cannot have . else when submitting to UiPath will fail E.g. 'Flight No.' will not work, use 'Flight No'
+Forms:
+  Air Shipment Requestor:
+    Values:
+      Flight No:
+        Placeholder: Example '12345'
+        Regex: ^\d+$
+        RegexMsg: Please enter only numeric number
+        Optional: false
+      Batch No:
+        Optional: false
+    Queue Name: GetFreightData
+  Sea Shipment Requestor:
+    Values:
+      Ship No:
+      Container No:
+    Queue Name: GetFreightData
+
+# Do Not Remove or Edit Below This
+Flask:
+  Host: 127.0.0.1
+  Debug: false
+  Port: 5500
+
+UiPathDefault:
+  Optional: false
+  Hidden: false
+  Placeholder:
+  Value:
+  Regex:
+  RegexMsg:
+
+FormsFieldsDefault:
+  Optional: false
+  Placeholder:
+  Default:
+  Regex:
+  RegexMsg:
