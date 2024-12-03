@@ -16,7 +16,6 @@ UiPath:
     Regex: ^\d+$
     RegexMsg: Please enter only numeric number
     Placeholder: UiPath Folder
-    Optional: false
   TOKEN:
     Value: Enter Your Token Value Here
     Placeholder: Only edit this if you need to use another token. Else leave this as blank to use default
@@ -34,8 +33,8 @@ Forms:
       Flight No:
         Placeholder: Example '12345'
         Regex: ^\d+$
-        RegexMsg: Please enter only numeric number
-        Optional: false
+        RegexMsg: Please enter only numeric numbere
+        Optional: true
       Batch No:
         Optional: false
     Queue Name: GetFreightData
